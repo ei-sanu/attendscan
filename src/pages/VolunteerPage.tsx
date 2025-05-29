@@ -131,6 +131,14 @@ const VolunteerPage: React.FC = () => {
     };
   }, [scanning, captureFrame]);
 
+  useEffect(() => {
+    // Load saved records from localStorage on component mount
+    const savedRecords = localStorage.getItem('attendanceRecords');
+    if (savedRecords) {
+      setAttendanceRecords(JSON.parse(savedRecords));
+    }
+  }, []);
+
   const startScanning = () => {
     setScanning(true);
     setScannedData(null);
@@ -139,25 +147,33 @@ const VolunteerPage: React.FC = () => {
   const markAttendance = async (registrationNumber: string) => {
     setLoading(true);
 
+    // Check for duplicate entry first
+    const today = new Date().toLocaleDateString();
+    const alreadyScannedToday = attendanceRecords.some(record => {
+      const recordDate = new Date(record.timestamp).toLocaleDateString();
+      return record.registrationNumber === registrationNumber && recordDate === today;
+    });
+
+    if (alreadyScannedToday) {
+      toast.error('Attendance already recorded for today');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const attendanceData = {
-        registrationNumber,
-        timestamp: new Date().toISOString(),
-        status: 'Present'
-      };
+      const currentTime = new Date().toISOString();
+      const formData = new FormData();
+      formData.append('registrationNumber', registrationNumber);
+      formData.append('timestamp', currentTime);
+      formData.append('status', 'Present');
 
       const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors', // Important for Google Apps Script
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(attendanceData)
+        mode: 'no-cors',
+        body: formData
       });
 
-      // Since we're using no-cors, we can't actually read the response
-      // So we'll assume success if no error was thrown
+      // Add to local records
       const newAttendance: Attendance = {
         registrationNumber,
         timestamp: new Date().toLocaleString(),
@@ -165,7 +181,16 @@ const VolunteerPage: React.FC = () => {
       };
 
       setAttendanceRecords(prev => [newAttendance, ...prev]);
+
+      // Store in localStorage for persistence
+      const updatedRecords = [newAttendance, ...attendanceRecords];
+      localStorage.setItem('attendanceRecords', JSON.stringify(updatedRecords));
+
       toast.success(`Attendance recorded for ${registrationNumber}`);
+
+      // Reset scanner after successful recording
+      setScanning(false);
+      setScannedData(null);
 
     } catch (error) {
       console.error('Error recording attendance:', error);
