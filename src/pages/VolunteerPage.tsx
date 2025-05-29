@@ -216,7 +216,11 @@ const VolunteerPage: React.FC = () => {
                 audio={false}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
-                videoConstraints={{ facingMode: 'environment' }}
+                videoConstraints={{
+                  facingMode: { exact: "environment" },
+                  width: { ideal: 1280 },
+                  height: { ideal: 720 }
+                }}
                 className="w-full rounded-lg"
               />
             ) : (
