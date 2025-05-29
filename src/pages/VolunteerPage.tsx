@@ -69,35 +69,51 @@ const VolunteerPage: React.FC = () => {
   const captureFrame = useCallback(() => {
     if (!scanning || !webcamRef.current) return;
 
-    const imageSrc = webcamRef.current.getScreenshot();
-    if (!imageSrc) return;
-
-    const image = new Image();
-    image.src = imageSrc;
-
-    image.onload = () => {
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      if (!context) return;
-
-      canvas.width = image.width;
-      canvas.height = image.height;
-      context.drawImage(image, 0, 0, image.width, image.height);
-
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      const code = jsQR(imageData.data, imageData.width, imageData.height, {
-        inversionAttempts: 'dontInvert',
-      });
-
-      if (code) {
-        const registrationNumber = verifyQRCode(code.data);
-        if (registrationNumber) {
-          setScanning(false);
-          setScannedData(registrationNumber);
-          markAttendance(registrationNumber);
-        }
+    try {
+      const imageSrc = webcamRef.current.getScreenshot();
+      if (!imageSrc) {
+        console.log("No image captured");
+        return;
       }
-    };
+
+      const image = new Image();
+      image.src = imageSrc;
+
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        if (!context) {
+          console.error("Could not get canvas context");
+          return;
+        }
+
+        canvas.width = image.width;
+        canvas.height = image.height;
+        context.drawImage(image, 0, 0, image.width, image.height);
+
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: 'dontInvert',
+        });
+
+        if (code) {
+          console.log("QR code detected:", code.data);
+          const registrationNumber = verifyQRCode(code.data);
+          if (registrationNumber) {
+            setScanning(false);
+            setScannedData(registrationNumber);
+            markAttendance(registrationNumber);
+          }
+        }
+      };
+
+      image.onerror = () => {
+        console.error("Failed to load captured image");
+      };
+    } catch (error) {
+      console.error("Error in captureFrame:", error);
+      toast.error("Error scanning QR code. Please try again.");
+    }
   }, [scanning]);
 
   useEffect(() => {
@@ -217,11 +233,18 @@ const VolunteerPage: React.FC = () => {
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
                 videoConstraints={{
-                  facingMode:  "environment" 
+                  facingMode: { exact: "environment" },
                   width: { ideal: 1280 },
                   height: { ideal: 720 }
                 }}
                 className="w-full rounded-lg"
+                onUserMedia={() => {
+                  console.log("Camera access granted");
+                }}
+                onUserMediaError={(err) => {
+                  console.error("Camera error:", err);
+                  toast.error("Failed to access camera. Please check permissions.");
+                }}
               />
             ) : (
               <div className="aspect-video bg-[#1a1a25] flex items-center justify-center rounded-lg">
