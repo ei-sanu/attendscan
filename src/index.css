@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #A020F0;
+  --primary-light: #c27ff8;
+  --primary-dark: #7a00cd;
+  --dark-bg: #121218;
+  --card-bg: #1e1e2d;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3cc;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-[#121218] text-white font-sans;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23A020F0' fill-opacity='0.08'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 20.83l2.83-2.83 1.41 1.41L1.41 22.24H0v-1.41zM0 3.06l2.83-2.83 1.41 1.41L1.41 4.47H0V3.06zm20 0l2.83-2.83 1.41 1.41L21.41 4.47h-1.41V3.06zm0 17.77l2.83-2.83 1.41 1.41-2.83 2.83h-1.41v-1.41zm0 17.77l2.83-2.83 1.41 1.41-2.83 2.83h-1.41v-1.41zM17.18 0l2.83 2.83-1.41 1.41L15.77 1.41V0h1.41zM34.94 0l2.83 2.83-1.41 1.41L33.53 1.41V0h1.41zM34.94 17.77l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM34.94 35.53l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM52.71 0l2.83 2.83-1.41 1.41L51.29 1.41V0h1.41zM52.71 17.77l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM52.71 35.53l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM70.47 0l2.83 2.83-1.41 1.41L69.06 1.41V0h1.41zM70.47 17.77l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM70.47 35.53l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM88.24 0l2.83 2.83-1.41 1.41L86.82 1.41V0h1.41zM88.24 17.77l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM88.24 35.53l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM105.99 0l2.83 2.83-1.41 1.41-2.83-2.83V0h1.41zM105.99 17.77l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM105.99 35.53l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM123.76 0l2.83 2.83-1.41 1.41-2.83-2.83V0h1.41zM123.76 17.77l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41zM123.76 35.53l2.83 2.83-1.41 1.41-2.83-2.83v-1.41h1.41z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 rounded-lg bg-[#A020F0] hover:bg-[#8010d0] text-white font-medium transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .card {
+    @apply bg-[#1e1e2d] p-6 rounded-xl border border-[#A020F088] shadow-lg shadow-[#A020F033] backdrop-blur-sm;
+  }
+  
+  .input-field {
+    @apply w-full p-3 rounded-lg bg-[#2a2a3d] border border-[#A020F055] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#A020F0] transition-all duration-300;
+  }
+  
+  .page-title {
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 relative;
+  }
+  
+  .page-title::after {
+    content: '';
+    @apply absolute bottom-0 left-0 h-1 w-20 bg-[#A020F0] rounded-full;
+  }
+}

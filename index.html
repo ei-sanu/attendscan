@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AttendScan - QR Code Attendance System</title>
+    <meta name="description" content="A secure QR code-based attendance tracking system with Google Sheets integration">
+    <meta name="theme-color" content="#A020F0">
+    <!-- Print styles for QR code -->
+    <style>
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        #qr-code, #qr-code * {
+          visibility: visible;
+        }
+        #qr-code {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
