@@ -21,8 +21,8 @@ const VolunteerPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  // Google Apps Script URL would go here in a real application
-  const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzr0z5Y9CUxfNd2xSi4JS_jp2OuU4gNpUtD61H89Q-KYBqkmZlfFsCIHTNE0sW4EtGK/exec';
+  // Update this line to use environment variable
+  const GOOGLE_APPS_SCRIPT_URL = process.env.REACT_APP_GOOGLE_SCRIPT_URL;
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
