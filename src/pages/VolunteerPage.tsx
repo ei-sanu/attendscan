@@ -217,7 +217,7 @@ const VolunteerPage: React.FC = () => {
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
                 videoConstraints={{
-                  facingMode: { exact: "environment" },
+                  facingMode:  "environment" 
                   width: { ideal: 1280 },
                   height: { ideal: 720 }
                 }}
