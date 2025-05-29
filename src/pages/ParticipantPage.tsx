@@ -73,7 +73,7 @@ const ParticipantPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto ">
-      <h1 className="page-title ml-48">Participant Verification</h1>
+      <h1 className="page-title text-center">Participant Verification</h1>
 
       {!verified ? (
         <motion.div
