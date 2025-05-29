@@ -20,6 +20,7 @@ const VolunteerPage: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [cameraMode, setCameraMode] = useState<"environment" | "user">("environment");
 
   // Update this line to use environment variable
   const GOOGLE_APPS_SCRIPT_URL = process.env.REACT_APP_GOOGLE_SCRIPT_URL;
@@ -228,24 +229,33 @@ const VolunteerPage: React.FC = () => {
 
           <div className="bg-black rounded-lg overflow-hidden mb-6 relative">
             {scanning ? (
-              <Webcam
-                audio={false}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                videoConstraints={{
-                  facingMode: { exact: "environment" },
-                  width: { ideal: 1280 },
-                  height: { ideal: 720 }
-                }}
-                className="w-full rounded-lg"
-                onUserMedia={() => {
-                  console.log("Camera access granted");
-                }}
-                onUserMediaError={(err) => {
-                  console.error("Camera error:", err);
-                  toast.error("Failed to access camera. Please check permissions.");
-                }}
-              />
+              <>
+                <Webcam
+                  audio={false}
+                  ref={webcamRef}
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={{
+                    facingMode: cameraMode,
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                  }}
+                  className="w-full rounded-lg"
+                  onUserMedia={() => {
+                    console.log("Camera access granted");
+                  }}
+                  onUserMediaError={(err) => {
+                    console.error("Camera error:", err);
+                    toast.error("Failed to access camera. Please check permissions.");
+                  }}
+                />
+                <button
+                  onClick={() => setCameraMode(prev => prev === "environment" ? "user" : "environment")}
+                  className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 transition-all"
+                  title="Switch Camera"
+                >
+                  <RefreshCw className="h-5 w-5 text-white" />
+                </button>
+              </>
             ) : (
               <div className="aspect-video bg-[#1a1a25] flex items-center justify-center rounded-lg">
                 <div className="text-center p-8">
